@@ -1,18 +1,18 @@
-interface Size {
+export interface SizeType {
     sm: string;
     md: string;
     lg: string;
     xl: string;
   }
   
-  const size: Size = {
+  const size: SizeType = {
     sm: '320px',
     md: '768px',
     lg: '992px',
     xl: '2560px',
   };
   
-  export const device:Size = {
+  export const device:SizeType = {
     sm: `(max-width: ${size.sm})`,
     md: `(max-width: ${size.md})`,
     lg: `(max-width: ${size.lg})`,
