@@ -6,7 +6,7 @@ export const Button = styled.button.withConfig({
 })<buttonTypes>`
  border-radius: 8px;
   font-size: 18px;
-  border: 1px solid #3878d5;
+  border: 1px solid ${props=>props.theme.colors.primary};
   padding: 8px;
   &:disabled {
     opacity: 50%;

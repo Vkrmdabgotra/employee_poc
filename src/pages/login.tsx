@@ -1,39 +1,51 @@
+import { Button } from "@/components/formTags/Button/button.styled";
 import ControlledInput from "@/components/formTags/Input/controlledInput";
+import AuthLayout from "@/components/layouts/Auth";
+import { inputValues, UserDetail } from "@/utils/common.types";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Link from "next/link";
+import { ReactElement } from "react";
 import { useForm } from "react-hook-form";
+import { useTheme } from "styled-components";
+import * as yup from "yup";
+export type loginType=Pick<UserDetail,"email"|"password">
 
 const Login = () => {
-    const { control } = useForm()
-    return <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img className="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
-        </div>
+   const co= useTheme()
+   
+    const signInSchema = yup.object().shape({
+        email: yup.string().required("Please enter an email.").matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, { message: "Please enter valid email" }),
+        password: yup.string().required("Please enter password")
+    })
+    const { control, handleSubmit } = useForm({
+        defaultValues: {
+            email: '',
+            password: ''
+        },
+        resolver: yupResolver(signInSchema)
+    })
+    const submithandler = (data: loginType) => {
+        console.log(data);
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" action="#" method="POST">
-                {/* <div>
-                    <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
-                    <div className="mt-2">
-                        <input id="email" name="email" type="email" autoComplete="email" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                    </div>
-                </div> */}
-                <div>
-                    <ControlledInput control={control} name="email" label="Email address" />
-                </div>
-                <div>
-                    <div className="flex items-center justify-between">
-                        <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
-                    </div>
-                    <div className="mt-2">
-                        <input id="password" name="password" type="password" autoComplete="current-password" required className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                    </div>
-                </div>
-
-                <div>
-                    <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
-                </div>
-            </form>
+    }
+    return <form className="space-y-6" onSubmit={handleSubmit(submithandler)}>
+        <div>
+            <ControlledInput control={control} name="email" label="Email address" />
         </div>
-    </div>
+        <div>
+            <ControlledInput control={control} name="password" label="Password" />
+        </div>
+        <div>
+            <Button btnsize="md" variant="primary" className="w-full" type="submit">
+                Submit
+            </Button>
+        </div>
+        <p>don&apos;t have an account? <Link  href="/register" className="underline"style={{color:co.colors.primary}}>Sign Up</Link></p>
+    </form>
+};
+Login.getLayout = function (page: ReactElement) {
+    return <AuthLayout heading="Sign in to your account">
+        {page}
+    </AuthLayout>
 }
 export default Login;
