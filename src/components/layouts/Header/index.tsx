@@ -16,7 +16,7 @@ const Header = () => {
                         Sign In
                     </Button>
                 </Link>
-                <Link href='/signup'>
+                <Link href='/register'>
                     <Button btnsize="md" variant="primary">
                         Sign Up
                     </Button>
